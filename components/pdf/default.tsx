@@ -10,6 +10,8 @@ import {
 } from "@react-pdf/renderer";
 import type { InvoiceSchema } from "@/lib/schemas/invoice";
 import type { PresetPdfSlots } from "@/lib/schemas/presets/types";
+import { formatCurrency, formatDate } from "@/lib/format";
+import { computeInvoiceTotals } from "@/lib/billing";
 
 const COLORS = {
   text: "#0a0a0a",
@@ -110,28 +112,6 @@ const styles = StyleSheet.create({
   signatureLabel: { color: COLORS.muted, fontSize: 9, marginTop: 4 },
 });
 
-const formatCurrency = (value: number, currency: string) => {
-  try {
-    return new Intl.NumberFormat("es-HN", {
-      style: "currency",
-      currency,
-    }).format(value);
-  } catch {
-    return `${currency} ${value.toFixed(2)}`;
-  }
-};
-
-const formatDate = (date: Date | null | undefined) => {
-  if (!date) return "";
-  const d = date instanceof Date ? date : new Date(date);
-  if (Number.isNaN(d.getTime())) return "";
-  return new Intl.DateTimeFormat("es-HN", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(d);
-};
-
 interface DefaultInvoicePdfProps {
   data: InvoiceSchema;
   pdfSlots?: PresetPdfSlots;
@@ -142,18 +122,10 @@ export function DefaultInvoicePdf({ data, pdfSlots }: DefaultInvoicePdfProps) {
   const themeColor = invoice.themeColor;
   const presetFields = data.presetFields;
 
-  const subtotal = items.reduce(
-    (sum, item) => sum + item.quantity * item.unitPrice,
-    0,
+  const { subtotal, billings, total } = computeInvoiceTotals(
+    items,
+    invoice.billingDetails,
   );
-  const billings = invoice.billingDetails.map((detail) => ({
-    ...detail,
-    amount:
-      detail.type === "percentage"
-        ? subtotal * (detail.value / 100)
-        : detail.value,
-  }));
-  const total = subtotal + billings.reduce((sum, b) => sum + b.amount, 0);
   const invoiceNumber = `${invoice.invoicePrefix ?? ""}${invoice.serialNumber}`;
 
   const hasFooter =

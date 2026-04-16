@@ -5,35 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import type { InvoiceSchema } from "@/lib/schemas/invoice";
 import type { PresetPreviewSlots } from "@/lib/schemas/presets/types";
+import { formatCurrency, formatDate } from "@/lib/format";
+import { computeInvoiceTotals } from "@/lib/billing";
 
 const A4_WIDTH_PX = 794;
 const A4_HEIGHT_PX = 1123;
-
-const formatCurrency = (value: number, currency: string) => {
-  try {
-    return new Intl.NumberFormat("es-HN", {
-      style: "currency",
-      currency,
-    }).format(value);
-  } catch {
-    return `${currency} ${value.toFixed(2)}`;
-  }
-};
-
-const formatDate = (date: Date | null | undefined) => {
-  if (!date) {
-    return "";
-  }
-  const d = date instanceof Date ? date : new Date(date);
-  if (Number.isNaN(d.getTime())) {
-    return "";
-  }
-  return new Intl.DateTimeFormat("es-HN", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(d);
-};
 
 interface InvoicePreviewProps {
   preview?: PresetPreviewSlots;
@@ -44,20 +20,10 @@ export function InvoicePreview({ preview }: InvoicePreviewProps) {
   const { company, client, invoice, items, additionalInfo } = watch();
   const themeColor = invoice.themeColor;
 
-  const subtotal = items.reduce(
-    (sum, item) => sum + item.quantity * item.unitPrice,
-    0,
+  const { subtotal, billings, total } = computeInvoiceTotals(
+    items,
+    invoice.billingDetails,
   );
-
-  const billings = invoice.billingDetails.map((detail) => ({
-    ...detail,
-    amount:
-      detail.type === "percentage"
-        ? subtotal * (detail.value / 100)
-        : detail.value,
-  }));
-
-  const total = subtotal + billings.reduce((sum, b) => sum + b.amount, 0);
   const invoiceNumber = `${invoice.invoicePrefix ?? ""}${invoice.serialNumber}`;
 
   const hasFooter =

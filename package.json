@@ -10,6 +10,7 @@
     "knip": "knip"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@hugeicons/core-free-icons": "^4.1.1",
     "@hugeicons/react": "^1.1.6",
     "class-variance-authority": "^0.7.1",

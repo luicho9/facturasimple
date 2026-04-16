@@ -31,6 +31,26 @@ export function ClientDetails() {
         />
         <FieldError errors={[errors.client?.address]} />
       </Field>
+      <Field>
+        <FieldLabel>Email</FieldLabel>
+        <Input
+          {...register("client.email")}
+          type="email"
+          autoComplete="off"
+          placeholder="cliente@ejemplo.com"
+        />
+        <FieldError errors={[errors.client?.email]} />
+      </Field>
+      <Field>
+        <FieldLabel>Teléfono</FieldLabel>
+        <Input
+          {...register("client.phone")}
+          type="tel"
+          autoComplete="off"
+          placeholder="+504 0000-0000"
+        />
+        <FieldError errors={[errors.client?.phone]} />
+      </Field>
     </FieldGroup>
   );
 }

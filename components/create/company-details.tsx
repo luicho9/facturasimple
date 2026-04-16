@@ -31,6 +31,26 @@ export function CompanyDetails() {
         />
         <FieldError errors={[errors.company?.address]} />
       </Field>
+      <Field>
+        <FieldLabel>Email</FieldLabel>
+        <Input
+          {...register("company.email")}
+          type="email"
+          autoComplete="off"
+          placeholder="contacto@empresa.com"
+        />
+        <FieldError errors={[errors.company?.email]} />
+      </Field>
+      <Field>
+        <FieldLabel>Teléfono</FieldLabel>
+        <Input
+          {...register("company.phone")}
+          type="tel"
+          autoComplete="off"
+          placeholder="+504 0000-0000"
+        />
+        <FieldError errors={[errors.company?.phone]} />
+      </Field>
     </FieldGroup>
   );
 }

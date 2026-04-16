@@ -6,6 +6,8 @@ export const invoiceSchema = z.object({
     signature: z.string().nullable().optional(),
     name: z.string().min(1, "El nombre de la empresa es requerido"),
     address: z.string().min(1, "La dirección de la empresa es requerida"),
+    email: z.email("Email inválido").or(z.literal("")).optional(),
+    phone: z.string().optional(),
     metadata: z.array(
       z.object({
         label: z.string().min(1, "La etiqueta no puede estar vacía"),
@@ -16,6 +18,8 @@ export const invoiceSchema = z.object({
   client: z.object({
     name: z.string().min(1, "El nombre del cliente es requerido"),
     address: z.string().min(1, "La dirección del cliente es requerida"),
+    email: z.email("Email inválido").or(z.literal("")).optional(),
+    phone: z.string().optional(),
     metadata: z.array(
       z.object({
         label: z.string().min(1, "La etiqueta no puede estar vacía"),
@@ -71,11 +75,15 @@ export const invoiceSchemaDefaultValues: InvoiceSchema = {
   company: {
     name: "Factura Simple S. de R.L.",
     address: "Col. Los Pinos, Bloque 5, Casa 5",
+    email: "",
+    phone: "",
     metadata: [],
   },
   client: {
     name: "Juan Pérez",
     address: "Col. Los Alamos, Bloque 10, Casa 10",
+    email: "",
+    phone: "",
     metadata: [],
   },
   invoice: {

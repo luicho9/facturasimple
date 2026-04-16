@@ -146,8 +146,12 @@ export function InvoicePreview({ preview }: InvoicePreviewProps) {
                 <p className="text-muted-foreground mt-1 leading-relaxed whitespace-pre-line">
                   {company.address}
                 </p>
-                {company.metadata.length > 0 && (
+                {(company.email ||
+                  company.phone ||
+                  company.metadata.length > 0) && (
                   <ul className="text-muted-foreground mt-1 space-y-0.5">
+                    {company.email && <li>{company.email}</li>}
+                    {company.phone && <li>{company.phone}</li>}
                     {company.metadata.map((m, i) => (
                       <li key={i}>
                         <span className="font-medium">{m.label}:</span>{" "}
@@ -165,8 +169,12 @@ export function InvoicePreview({ preview }: InvoicePreviewProps) {
                 <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
                   {client.address}
                 </p>
-                {client.metadata.length > 0 && (
+                {(client.email ||
+                  client.phone ||
+                  client.metadata.length > 0) && (
                   <ul className="text-muted-foreground mt-1 space-y-0.5">
+                    {client.email && <li>{client.email}</li>}
+                    {client.phone && <li>{client.phone}</li>}
                     {client.metadata.map((m, i) => (
                       <li key={i}>
                         <span className="font-medium">{m.label}:</span>{" "}

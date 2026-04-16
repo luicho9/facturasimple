@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -9,7 +8,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { PlusSignCircleIcon, Mail01Icon } from "@hugeicons/core-free-icons";
+import { PlusSignCircleIcon } from "@hugeicons/core-free-icons";
 
 export function NavMain({
   items,

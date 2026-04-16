@@ -26,6 +26,13 @@ export function SiteHeader() {
           className="mx-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
         />
         <h1 className="text-base font-medium">{page}</h1>
+        {/* Portal target: pages mount page-specific actions (e.g. Download on */}
+        {/* /create) into this slot via createPortal. Keeps the header shared */}
+        {/* and avoids lifting per-page state up or prop-drilling through the layout. */}
+        <div
+          id="site-header-actions"
+          className="ml-auto flex items-center gap-2"
+        />
       </div>
     </header>
   );

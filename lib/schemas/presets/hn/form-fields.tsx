@@ -1,6 +1,7 @@
 "use client";
 
 import { Controller, useFormContext } from "react-hook-form";
+import { DatePicker } from "@/components/ui/date-picker";
 import {
   Field,
   FieldError,
@@ -8,7 +9,6 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { parseLocalDate, toDateInputValue } from "@/lib/utils";
 import type { HnFields } from "./schema";
 
 type HnForm = { presetFields: HnFields };
@@ -71,11 +71,7 @@ export function HnFormFields() {
           control={control}
           name="presetFields.fechaLimiteEmision"
           render={({ field }) => (
-            <Input
-              type="date"
-              value={toDateInputValue(field.value)}
-              onChange={(e) => field.onChange(parseLocalDate(e.target.value))}
-            />
+            <DatePicker value={field.value} onChange={field.onChange} />
           )}
         />
         <FieldError errors={[presetErrors?.fechaLimiteEmision]} />

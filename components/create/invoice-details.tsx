@@ -2,7 +2,7 @@
 
 import { useFormContext, Controller } from "react-hook-form";
 import type { InvoiceSchema } from "@/lib/schemas/invoice";
-import { parseLocalDate, toDateInputValue } from "@/lib/utils";
+import { DatePicker } from "../ui/date-picker";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 
@@ -61,13 +61,7 @@ export function InvoiceDetails() {
           control={control}
           name="invoice.invoiceDate"
           render={({ field }) => (
-            <Input
-              type="date"
-              value={toDateInputValue(field.value)}
-              onChange={(e) =>
-                field.onChange(parseLocalDate(e.target.value) ?? undefined)
-              }
-            />
+            <DatePicker value={field.value} onChange={field.onChange} />
           )}
         />
         <FieldError errors={[errors.invoice?.invoiceDate]} />
@@ -79,11 +73,7 @@ export function InvoiceDetails() {
           control={control}
           name="invoice.dueDate"
           render={({ field }) => (
-            <Input
-              type="date"
-              value={toDateInputValue(field.value)}
-              onChange={(e) => field.onChange(parseLocalDate(e.target.value))}
-            />
+            <DatePicker value={field.value} onChange={field.onChange} />
           )}
         />
         <FieldError errors={[errors.invoice?.dueDate]} />

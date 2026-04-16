@@ -12,7 +12,9 @@ import { InvoiceItems } from "@/components/create/invoice-items";
 import { AdditionalInformation } from "@/components/create/additional-information";
 import { InvoicePreview } from "@/components/create/invoice-preview";
 import { InvoiceForm } from "@/components/create/invoice-form";
-import { useState } from "react";
+import { DownloadActions } from "@/components/create/download-actions";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { PresetKey, presets } from "@/lib/schemas/presets/registry";
 import {
   Select,
@@ -25,17 +27,28 @@ import {
 
 export default function Page() {
   const [presetKey, setPresetKey] = useState<PresetKey>("default");
+  const [headerTarget, setHeaderTarget] = useState<HTMLElement | null>(null);
+
+  // Look up the shared header slot after mount - on the first render the
+  // SiteHeader hasn't committed to the DOM yet, so the node isn't queryable.
+  // Storing it in state triggers a re-render once we have the target, at
+  // which point createPortal can mount the Download button into the header.
+  useEffect(() => {
+    setHeaderTarget(document.getElementById("site-header-actions"));
+  }, []);
 
   const preset = presets[presetKey];
   const defaults = preset.invoiceDefaults;
 
   return (
-    <section className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
-      <InvoiceForm
-        key={presetKey}
-        defaults={defaults}
-        fieldsSchema={preset.fieldsSchema}
-      >
+    <InvoiceForm
+      key={presetKey}
+      defaults={defaults}
+      fieldsSchema={preset.fieldsSchema}
+    >
+      {headerTarget &&
+        createPortal(<DownloadActions pdfSlots={preset.pdf} />, headerTarget)}
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
         <div className="flex flex-col">
           <div className="flex items-center justify-between rounded-t-2xl border px-4 py-2">
             <span className="text-sm font-medium">Plantilla</span>
@@ -113,7 +126,7 @@ export default function Page() {
         </div>
 
         <InvoicePreview preview={preset.preview} />
-      </InvoiceForm>
-    </section>
+      </section>
+    </InvoiceForm>
   );
 }

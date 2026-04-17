@@ -17,6 +17,7 @@ export default function DashboardLayout({
   return (
     <TooltipProvider>
       <SidebarProvider
+        className="h-svh min-h-0 overflow-hidden"
         style={
           {
             "--sidebar-width": "calc(var(--spacing) * 60)",
@@ -25,14 +26,12 @@ export default function DashboardLayout({
         }
       >
         <AppSidebar variant="inset" />
-        <SidebarInset>
+        <SidebarInset className="h-full min-h-0 overflow-hidden">
           <SiteHeader />
-          <div className="flex flex-1 flex-col">
-            <div className="@container/main flex flex-1 flex-col gap-2">
-              <main className="flex flex-col gap-4 p-4 md:gap-6 md:p-6">
-                {children}
-              </main>
-            </div>
+          <div className="@container/main flex flex-1 flex-col overflow-y-auto">
+            <main className="flex flex-col gap-4 p-4 md:gap-6 md:p-6">
+              {children}
+            </main>
           </div>
         </SidebarInset>
       </SidebarProvider>

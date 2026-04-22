@@ -7,8 +7,8 @@ const REPO_URL = "https://github.com/luicho9/facturasimple";
 
 export default function Home() {
   return (
-    <main>
-      <header className="flex items-center justify-between px-6 py-5">
+    <main className="flex min-h-dvh flex-col">
+      <header className="flex items-center justify-between px-6 py-4">
         <Link
           href="/"
           className="flex items-center gap-2 text-sm font-semibold tracking-tight"
@@ -32,7 +32,7 @@ export default function Home() {
         </Link>
       </header>
 
-      <main className="flex flex-1 flex-col items-center px-4 pt-12 pb-16 sm:px-6 sm:pt-24">
+      <div className="flex flex-1 flex-col items-center px-4 pt-12 pb-16 sm:px-6">
         <section className="flex flex-col items-center text-center">
           <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
             La forma más simple de facturar.
@@ -46,10 +46,10 @@ export default function Home() {
           </Button>
         </section>
 
-        <section className="mt-14 w-full sm:mt-24">
+        <section className="w-full mt-12">
           <LandingDemo />
         </section>
-      </main>
+      </div>
 
       <footer className="flex items-center justify-between px-6 py-6 text-xs text-muted-foreground">
         <span>

@@ -7,16 +7,16 @@ import type { InvoiceSchema } from "@/lib/schemas/invoice";
 
 const demoInvoice: InvoiceSchema = {
   company: {
-    name: "Estudio Luna",
-    address: "Col. Palmira, Av. Juan Pablo II\nTegucigalpa, Honduras",
-    email: "hola@estudioluna.com",
+    name: "Factura Simple",
+    address: "San Pedro Sula, Honduras",
+    email: "hola@facturasimple.app",
     phone: "+504 9999-1234",
     metadata: [],
   },
   client: {
-    name: "María Alvarado",
-    address: "Res. El Trapiche, Bloque 3\nTegucigalpa, Honduras",
-    email: "maria@alvarado.com",
+    name: "Jose Luis",
+    address: "San Pedro Sula, Honduras",
+    email: "jose@flores.com",
     phone: "",
     metadata: [],
   },
@@ -62,9 +62,7 @@ export function LandingDemo() {
     <div className="mx-auto w-full max-w-5xl">
       <div className="overflow-hidden rounded-lg border bg-card shadow-2xl">
         <BrowserChrome url="facturasimple.app/create" />
-        <div
-          className="pointer-events-none h-[460px] overflow-hidden bg-muted p-3 select-none sm:h-[520px] sm:p-6 [mask-image:linear-gradient(to_bottom,black_70%,transparent)] [-webkit-mask-image:linear-gradient(to_bottom,black_70%,transparent)] [&_*::-webkit-scrollbar]:hidden [&_*]:[scrollbar-width:none]"
-        >
+        <div className="pointer-events-none h-[460px] overflow-hidden bg-muted p-3 select-none sm:h-[520px] sm:p-6 [mask-image:linear-gradient(to_bottom,black_70%,transparent)] [-webkit-mask-image:linear-gradient(to_bottom,black_70%,transparent)] [&_*::-webkit-scrollbar]:hidden [&_*]:[scrollbar-width:none]">
           <InvoiceForm defaults={demoInvoice}>
             <InvoicePreview />
           </InvoiceForm>

@@ -14,8 +14,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Factura Simple",
+  metadataBase: new URL("https://facturasimple.app"),
+  title: {
+    default: "Factura Simple",
+    template: "%s · Factura Simple",
+  },
   description: "Genera facturas profesionales de forma rápida y sencilla",
+  openGraph: {
+    type: "website",
+    siteName: "Factura Simple",
+    title: "Factura Simple",
+    description: "Genera facturas profesionales de forma rápida y sencilla",
+    url: "/",
+    locale: "es_ES",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Factura Simple",
+    description: "Genera facturas profesionales de forma rápida y sencilla",
+  },
 };
 
 export default function RootLayout({

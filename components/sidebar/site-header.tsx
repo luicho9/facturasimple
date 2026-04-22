@@ -1,5 +1,7 @@
 "use client";
 
+import { createContext, useContext, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -13,7 +15,32 @@ const pages = {
 
 type PagePath = keyof typeof pages;
 
-export function SiteHeader() {
+const HeaderActionsContext = createContext<HTMLElement | null>(null);
+
+export function HeaderActionsProvider({ children }: { children: ReactNode }) {
+  const [slot, setSlot] = useState<HTMLElement | null>(null);
+
+  return (
+    <HeaderActionsContext.Provider value={slot}>
+      <SiteHeader slotRef={setSlot} />
+      {children}
+    </HeaderActionsContext.Provider>
+  );
+}
+
+export function HeaderActions({ children }: { children: ReactNode }) {
+  const slot = useContext(HeaderActionsContext);
+  if (!slot) {
+    return null;
+  }
+  return createPortal(children, slot);
+}
+
+function SiteHeader({
+  slotRef,
+}: {
+  slotRef: (el: HTMLElement | null) => void;
+}) {
   const pathname = usePathname();
   const page = pages[pathname as PagePath];
 
@@ -26,13 +53,7 @@ export function SiteHeader() {
           className="mx-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
         />
         <h1 className="text-base font-medium">{page}</h1>
-        {/* Portal target: pages mount their own contextual actions here via */}
-        {/* createPortal (e.g. Download on /create, New Client on /clients). */}
-        {/* This keeps the header shared without prop-drilling page state. */}
-        <div
-          id="site-header-actions"
-          className="ml-auto flex items-center gap-2"
-        />
+        <div ref={slotRef} className="ml-auto flex items-center gap-2" />
       </div>
     </header>
   );

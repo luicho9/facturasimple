@@ -22,7 +22,15 @@ import { downloadPdf, viewPdf } from "@/lib/pdf/invoice-download-manager";
 
 type Action = "view-pdf" | "download-pdf";
 
-export function DownloadActions({ pdfSlots }: { pdfSlots?: PresetPdfSlots }) {
+interface DownloadActionsProps {
+  pdfSlots?: PresetPdfSlots;
+  onAfterDownload?: (data: InvoiceSchema) => Promise<void> | void;
+}
+
+export function DownloadActions({
+  pdfSlots,
+  onAfterDownload,
+}: DownloadActionsProps) {
   const { getValues } = useFormContext<InvoiceSchema>();
   const [busy, setBusy] = useState(false);
 
@@ -32,7 +40,10 @@ export function DownloadActions({ pdfSlots }: { pdfSlots?: PresetPdfSlots }) {
       const data = getValues();
       const init = { data, pdfSlots };
       if (action === "view-pdf") await viewPdf(init);
-      else if (action === "download-pdf") await downloadPdf(init);
+      else if (action === "download-pdf") {
+        await downloadPdf(init);
+        await onAfterDownload?.(data);
+      }
     } catch (err) {
       console.error(err);
       toast.error("No se pudo generar el documento. Revisa la consola.");

@@ -21,7 +21,7 @@ export type Preset = {
   label: string;
   invoiceDefaults: InvoiceSchema;
   fieldsSchema?: z.ZodTypeAny;
-  FormFields?: React.ComponentType;
+  FormFields?: React.ComponentType<{ pathPrefix?: string }>;
   preview?: PresetPreviewSlots;
   pdf?: PresetPdfSlots;
 };

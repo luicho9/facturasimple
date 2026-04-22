@@ -1,6 +1,6 @@
 "use client";
 
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, type FieldValues, type Path } from "react-hook-form";
 import { DatePicker } from "@/components/ui/date-picker";
 import {
   Field,
@@ -9,72 +9,76 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import type { HnFields } from "./schema";
 
-type HnForm = { presetFields: HnFields };
+interface HnFormFieldsProps {
+  pathPrefix?: string;
+}
 
-export function HnFormFields() {
+export function HnFormFields({ pathPrefix = "presetFields" }: HnFormFieldsProps = {}) {
   const {
     register,
     control,
     formState: { errors },
-  } = useFormContext<HnForm>();
-  const presetErrors = errors.presetFields;
+  } = useFormContext<FieldValues>();
+
+  const path = (key: string) => `${pathPrefix}.${key}` as Path<FieldValues>;
+  const prefixErrors =
+    (errors[pathPrefix as keyof typeof errors] as Record<string, { message?: string }> | undefined) ?? {};
 
   return (
     <FieldGroup>
       <Field>
         <FieldLabel>RTN de la empresa</FieldLabel>
         <Input
-          {...register("presetFields.rtnEmpresa")}
+          {...register(path("rtnEmpresa"))}
           autoComplete="off"
           placeholder="00000000000000"
           maxLength={14}
         />
-        <FieldError errors={[presetErrors?.rtnEmpresa]} />
+        <FieldError errors={[prefixErrors.rtnEmpresa]} />
       </Field>
 
       <Field>
         <FieldLabel>RTN del cliente</FieldLabel>
         <Input
-          {...register("presetFields.rtnCliente")}
+          {...register(path("rtnCliente"))}
           autoComplete="off"
           placeholder="00000000000000"
           maxLength={14}
         />
-        <FieldError errors={[presetErrors?.rtnCliente]} />
+        <FieldError errors={[prefixErrors.rtnCliente]} />
       </Field>
 
       <Field>
         <FieldLabel>CAI</FieldLabel>
         <Input
-          {...register("presetFields.cai")}
+          {...register(path("cai"))}
           autoComplete="off"
           placeholder="XXXXXX-XXXXXX-XXXXXX-XXXXXX-XXXXXX-XX"
         />
-        <FieldError errors={[presetErrors?.cai]} />
+        <FieldError errors={[prefixErrors.cai]} />
       </Field>
 
       <Field>
         <FieldLabel>Rango autorizado</FieldLabel>
         <Input
-          {...register("presetFields.rangoAutorizado")}
+          {...register(path("rangoAutorizado"))}
           autoComplete="off"
           placeholder="000-001-01-00000001 al 000-001-01-00000500"
         />
-        <FieldError errors={[presetErrors?.rangoAutorizado]} />
+        <FieldError errors={[prefixErrors.rangoAutorizado]} />
       </Field>
 
       <Field>
         <FieldLabel>Fecha límite de emisión</FieldLabel>
         <Controller
           control={control}
-          name="presetFields.fechaLimiteEmision"
+          name={path("fechaLimiteEmision")}
           render={({ field }) => (
             <DatePicker value={field.value} onChange={field.onChange} />
           )}
         />
-        <FieldError errors={[presetErrors?.fechaLimiteEmision]} />
+        <FieldError errors={[prefixErrors.fechaLimiteEmision]} />
       </Field>
     </FieldGroup>
   );

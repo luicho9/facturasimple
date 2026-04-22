@@ -28,7 +28,6 @@ export default async function CompanyPage() {
     defaultPresetFields:
       (row.defaultPresetFields as Record<string, unknown>) ?? {},
     invoicePrefix: row.invoicePrefix,
-    nextSerialNumber: row.nextSerialNumber,
     defaultPaymentTerms: row.defaultPaymentTerms,
     defaultNotes: row.defaultNotes,
     defaultTerms: row.defaultTerms,

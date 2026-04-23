@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import {
   Accordion,
@@ -44,7 +44,6 @@ export function CompanyForm({ defaults }: CompanyFormProps) {
     register,
     control,
     handleSubmit,
-    watch,
     formState: { errors, isDirty, isSubmitting },
     reset,
   } = form;
@@ -52,8 +51,13 @@ export function CompanyForm({ defaults }: CompanyFormProps) {
   const [signatureUrl, setSignatureUrl] = useState<string | null>(
     defaults.signatureUrl,
   );
-  const selectedPresetKey = watch("defaultPreset") as PresetKey;
-  const selectedPreset = presets[selectedPresetKey];
+  const presetOptions = Object.entries(presets);
+  const selectedPresetKey = useWatch({
+    control,
+    name: "defaultPreset",
+    defaultValue: defaults.defaultPreset,
+  }) as PresetKey;
+  const selectedPreset = presets[selectedPresetKey] ?? presets.default;
   const PresetFormFields = selectedPreset?.FormFields;
 
   async function onSubmit(values: CompanySchema) {
@@ -69,6 +73,31 @@ export function CompanyForm({ defaults }: CompanyFormProps) {
   return (
     <FormProvider {...form}>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <div className="rounded-md border p-4">
+          <Field>
+            <FieldLabel>Plantilla</FieldLabel>
+            <Controller
+              control={control}
+              name="defaultPreset"
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Selecciona una plantilla" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {presetOptions.map(([key, value]) => (
+                      <SelectItem key={key} value={key}>
+                        {value.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            <FieldError errors={[errors.defaultPreset]} />
+          </Field>
+        </div>
+
         <Accordion
           type="single"
           collapsible
@@ -147,31 +176,6 @@ export function CompanyForm({ defaults }: CompanyFormProps) {
             </AccordionTrigger>
             <AccordionContent className="px-4">
               <FieldGroup>
-                <Field>
-                  <FieldLabel>Plantilla</FieldLabel>
-                  <Controller
-                    control={control}
-                    name="defaultPreset"
-                    render={({ field }) => (
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Object.entries(presets).map(([key, value]) => (
-                            <SelectItem key={key} value={key}>
-                              {value.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                  <FieldError errors={[errors.defaultPreset]} />
-                </Field>
                 <Field>
                   <FieldLabel>Moneda</FieldLabel>
                   <Controller
